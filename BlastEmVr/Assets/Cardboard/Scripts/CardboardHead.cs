@@ -70,7 +70,7 @@ public class CardboardHead : MonoBehaviour {
     }
   }
 
-  private bool updated;
+  protected bool updated;
 
   void Update() {
     updated = false;  // OK to recompute head pose.
@@ -85,7 +85,7 @@ public class CardboardHead : MonoBehaviour {
   }
 
   // Compute new head pose.
-  private void UpdateHead() {
+  protected virtual void UpdateHead() {
     if (updated) {  // Only one update per frame, please.
       return;
     }
