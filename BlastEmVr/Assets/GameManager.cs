@@ -6,12 +6,11 @@ using UnityEditor;
 public class GameManager : MonoBehaviour
 {
     public GameObject _cannonBall;
-    public GameObject _tank;
     public GameObject _cannonBallPlaceholder;
 
     public float maxPower;
     public float powerIncreaseRate;
-    private GameObject _playerTankBody;
+    public GameObject _playerTankBody;
 
     private bool pulling = false;
     private float power = 0;
@@ -21,13 +20,11 @@ public class GameManager : MonoBehaviour
 	{
         //_cannonBall = GameObject.FindGameObjectWithTag("CannonBall");
         //_cannonBall.SetActive(false);
-	    _playerTankBody = GameObject.FindGameObjectWithTag("PlayerTankTower");
+	    //_playerTankBody = GameObject.FindGameObjectWithTag("PlayerTankTower");
 
         //_cannonBall.SetActive(false);
 
 	    Cardboard.SDK.OnTrigger += ShootCannonBall;
-
-        ProjectCannonBall();
 	}
 
     // Update is called once per frame
@@ -77,14 +74,10 @@ public class GameManager : MonoBehaviour
         Quaternion rotation = _cannonBallPlaceholder.transform.rotation;
 
         GameObject ball = this.spawnBall(position, rotation);
-        //bear.GetComponent<Rigidbody>().AddRelativeForce(position * this.power);
-
-    private void ProjectCannonBall()
-    {
-        // var heading = target.position - player.position;
         Vector3 projectionVector = _cannonBall.transform.position - _playerTankBody.transform.position;
         _cannonBall.GetComponent<Rigidbody>().AddForce(projectionVector, ForceMode.Impulse);
     }
+
 
     private GameObject spawnBall(Vector3 position, Quaternion rotation)
     {

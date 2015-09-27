@@ -20,6 +20,6 @@ public class BallBehavior : MonoBehaviour {
         //  Destroy(this) would just destroy the rocket
         //                script attached to it
         //  Destroy(gameObject) destroys the whole thing
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }
