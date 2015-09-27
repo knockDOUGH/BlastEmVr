@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
         //_cannonBall.SetActive(false);
 
-	    Cardboard.SDK.OnTrigger += ShootCannonBall;
+	    //Cardboard.SDK.OnTrigger += ShootCannonBall;
 	}
 
     // Update is called once per frame
@@ -74,8 +74,8 @@ public class GameManager : MonoBehaviour
         Quaternion rotation = _cannonBallPlaceholder.transform.rotation;
 
         GameObject ball = this.spawnBall(position, rotation);
-        Vector3 projectionVector = _cannonBall.transform.position - _playerTankBody.transform.position;
-        _cannonBall.GetComponent<Rigidbody>().AddForce(projectionVector, ForceMode.Impulse);
+        Vector3 projectionVector = ball.transform.position - _playerTankBody.transform.position;
+        ball.GetComponent<Rigidbody>().AddForce(projectionVector * power);
     }
 
 
