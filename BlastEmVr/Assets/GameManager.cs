@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public float maxPower;
     public float powerIncreaseRate;
     public GameObject _playerTankBody;
+    public CardboardControl cardboardControl;
 
     private bool pulling = false;
     private float power = 0;
@@ -15,51 +16,38 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start ()
 	{
-        //_cannonBall = GameObject.FindGameObjectWithTag("CannonBall");
-        //_cannonBall.SetActive(false);
-	    //_playerTankBody = GameObject.FindGameObjectWithTag("PlayerTankTower");
-
-        //_cannonBall.SetActive(false);
-
-	    //Cardboard.SDK.OnTrigger += ShootCannonBall;
+        cardboardControl.trigger.OnDown += startPull;
+        cardboardControl.trigger.OnUp += stopPull;
 	}
+
+    void OnDestroy()
+    {
+        cardboardControl.trigger.OnDown -= startPull;
+        cardboardControl.trigger.OnUp -= stopPull;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        // left mouse clicked?
-        if (Input.GetMouseButtonDown(0))
-        {
-            this.startPull();
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            this.stopPull();
-        }
-
-        if (pulling)
+        if (pulling && power < maxPower)
         {
             power += powerIncreaseRate;
-
             if (power > maxPower) power = maxPower;
         }
     }
-
 
     void OnGUI()
     {
         GUI.Box(new Rect(0, 0, 100, 50), this.power.ToString());
     }
 
-
-    private void startPull()
+    private void startPull(object sender)
     {
         this.pulling = true;
         this.power = 0;
     }
 
-    private void stopPull()
+    private void stopPull(object sender)
     {
         this.pulling = false;
         this.ShootCannonBall();
