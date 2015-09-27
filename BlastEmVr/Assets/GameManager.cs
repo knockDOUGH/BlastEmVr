@@ -3,11 +3,11 @@
 public class GameManager : MonoBehaviour
 {
     public GameObject _cannonBall;
-    public GameObject _cannonBallPlaceholderPlayer;
-    public GameObject _playerTankBody;
+    public GameObject _playerCannonBallPlaceHolderTip;
+    public GameObject _playerCannonBallPlaceHolderBase;
 
-    public GameObject _cannonBallPlaceholderComputer;
-    public GameObject _computerTankBody;
+    public GameObject _compCannonBallPlaceHolderTip;
+    public GameObject _compCannonBallPlaceHolderBase;
 
     public float maxPower;
     public float powerIncreaseRate;
@@ -60,13 +60,13 @@ public class GameManager : MonoBehaviour
     private void stopPull(object sender)
     {
         this.pulling = false;
-        this.ShootCannonBall(_cannonBallPlaceholderPlayer, _playerTankBody);
+        this.ShootCannonBall(_playerCannonBallPlaceHolderTip, _playerCannonBallPlaceHolderBase);
         isPlayersTurn = false;
     }
 
     private void GenerateRandomComputerShot()
     {
-        ShootCannonBall(_cannonBallPlaceholderComputer, _computerTankBody);
+        ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase);
     }
 
     private void ShootCannonBall(GameObject cannonBallPlaceholder, GameObject tankTower)
