@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class BallBehavior : MonoBehaviour {
+    public GameObject Enemy;
 
 	// Use this for initialization
 	void Start () {
@@ -15,11 +16,14 @@ public class BallBehavior : MonoBehaviour {
 
     void OnCollisionEnter(Collision c)
     {
-        // destroy the rocket
-        // note:
-        //  Destroy(this) would just destroy the rocket
-        //                script attached to it
-        //  Destroy(gameObject) destroys the whole thing
-        //Destroy(gameObject);
+        if (c.gameObject.name.Equals("EnemyTank"))
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject, 3f);
+        }
+
     }
 }
