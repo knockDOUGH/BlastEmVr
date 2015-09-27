@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("stop pull");
         this.pulling = false;
-        this.ShootCannonBall(_playerCannonBallPlaceHolderTip, _playerCannonBallPlaceHolderBase);
+        this.ShootCannonBall(_playerCannonBallPlaceHolderTip, _playerCannonBallPlaceHolderBase, power);
         isPlayersTurn = false;
     }
 
@@ -76,18 +76,19 @@ public class GameManager : MonoBehaviour
         _compTower.transform.LookAt(_playerTower.transform);
 
         Vector3 rot = _compTower.transform.rotation.eulerAngles;
-        float degreesVarianceY = 10;
-        float degreesVarianceX = 10;
+        float degreesVarianceY = 7;
+        float degreesVarianceX = 5;
+        float baselineX = 5;
 
         rot.y += Random.Range(-degreesVarianceY, degreesVarianceY);
-        rot.x += Random.Range(-degreesVarianceX, degreesVarianceX);
+        rot.x -= Random.Range(baselineX - degreesVarianceX, baselineX + degreesVarianceX);
 
         _compTower.transform.rotation = Quaternion.Euler(rot);
 
-        ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase);
+        ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase, 700);
     }
 
-    private void ShootCannonBall(GameObject cannonBallPlaceholder, GameObject tankTower)
+    private void ShootCannonBall(GameObject cannonBallPlaceholder, GameObject tankTower, float power)
     {
         Vector3 position = cannonBallPlaceholder.transform.position;
         Quaternion rotation = cannonBallPlaceholder.transform.rotation;
