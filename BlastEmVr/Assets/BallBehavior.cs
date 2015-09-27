@@ -17,7 +17,6 @@ public class BallBehavior : MonoBehaviour {
 
     void OnCollisionEnter(Collision otherObject)
     {
-        Debug.Log("Canon ball collision");
         if (otherObject.gameObject != null && otherObject.gameObject.tag.Equals("Explodable"))
         {
             Debug.Log("came");

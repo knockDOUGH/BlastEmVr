@@ -29,7 +29,6 @@ public class TankEventTracker : MonoBehaviour {
             //Add rigid bodies to tank parts
             foreach (Transform part in gameObject.transform)
             {
-                Debug.Log("don't be a child");
                 part.gameObject.AddComponent<Rigidbody>();
             }
 
@@ -42,7 +41,7 @@ public class TankEventTracker : MonoBehaviour {
         Instantiate(Explosion,
                     position,
                         Quaternion.identity);
-        Collider[] colliders = Physics.OverlapSphere(position, 10);
+        Collider[] colliders = Physics.OverlapSphere(position, 1000);
 
         foreach (Collider c in colliders)
         {
@@ -51,7 +50,7 @@ public class TankEventTracker : MonoBehaviour {
                 continue;
             }
             Debug.Log("explode");
-            c.attachedRigidbody.AddExplosionForce(5 /*force*/, position, 5, 1, ForceMode.Impulse);
+            c.attachedRigidbody.AddExplosionForce(15 /*force*/, position, 50, 1, ForceMode.Impulse);
         }
     }
 }
