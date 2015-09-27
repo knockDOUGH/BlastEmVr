@@ -28,7 +28,7 @@ public class TankEventTracker : MonoBehaviour {
     public void Explode(Vector3 position)
     {
         Instantiate(Explosion,
-                    transform.position,
+                    position,
                         Quaternion.identity);
         Ray ray = Camera.main.ScreenPointToRay(position);
 
@@ -45,7 +45,7 @@ public class TankEventTracker : MonoBehaviour {
                     continue;
                 }
                 Debug.Log("explode");
-                c.attachedRigidbody.AddExplosionForce(10 /*force*/, hit.point, 10, 3, ForceMode.Impulse);
+                c.attachedRigidbody.AddExplosionForce(5 /*force*/, hit.point, 5, 1, ForceMode.Impulse);
             }
             //body.AddExplosionForce(5 /*force*/, hit.point, 5, 3, ForceMode.Impulse);
         }

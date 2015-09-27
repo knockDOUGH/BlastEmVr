@@ -17,19 +17,19 @@ public class BallBehavior : MonoBehaviour {
 
     void OnCollisionEnter(Collision c)
     {
-        if (c.gameObject.name.Equals("EnemyTank"))
+        if (c.gameObject != null && c.gameObject.transform.parent != null)
         {
-            Debug.Log("came");
-            Instantiate(Explosion,
-                        transform.position,
-                        Quaternion.identity);
-            c.gameObject.BroadcastMessage("Hit", c.transform.position);
-            Destroy(gameObject);
+            if (c.gameObject.transform.parent.name.Equals("EnemyTank"))
+            {
+                Debug.Log("came");
+                Instantiate(Explosion,
+                            transform.position,
+                            Quaternion.identity);
+                c.gameObject.transform.parent.BroadcastMessage("Hit", c.transform.position);
+                Destroy(gameObject);
+            }
         }
-        else
-        {
-            Destroy(gameObject, 3f);
-        }
+        Destroy(gameObject, 3f);
 
     }
 }
