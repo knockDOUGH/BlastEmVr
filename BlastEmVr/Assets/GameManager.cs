@@ -19,27 +19,27 @@ public class GameManager : MonoBehaviour
     private bool pulling = false;
     private float power = 0;
     private bool isPlayersTurn = true;
+    private bool isComputerShooting = false;
 
     // Use this for initialization
     void Start ()
 	{
-        cardboardControl.trigger.OnDown += startPull;
-        cardboardControl.trigger.OnUp += stopPull;
+        cardboardControl.trigger.OnDown += delegate (object sender)
+        {
+            if (isPlayersTurn) startPull();
+        };
+        cardboardControl.trigger.OnUp += delegate(object sender)
+        {
+            if (isPlayersTurn) stopPull();
+        };
 	}
-
-    void OnDestroy()
-    {
-        cardboardControl.trigger.OnDown -= startPull;
-        cardboardControl.trigger.OnUp -= stopPull;
-    }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isPlayersTurn)
+        if (!isPlayersTurn && !isComputerShooting)
         {
             StartCoroutine(GenerateRandomComputerShot());
-            isPlayersTurn = true;
         }
 
         if (isPlayersTurn && pulling && power < maxPower)
@@ -54,14 +54,14 @@ public class GameManager : MonoBehaviour
         GUI.Box(new Rect(0, 0, 100, 50), this.power.ToString());
     }
 
-    private void startPull(object sender)
+    private void startPull()
     {
         Debug.Log("start pull");
         this.pulling = true;
         this.power = 0;
     }
 
-    private void stopPull(object sender)
+    private void stopPull()
     {
         Debug.Log("stop pull");
         this.pulling = false;
@@ -71,8 +71,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GenerateRandomComputerShot()
     {
-        yield return new WaitForSeconds(0);
-
+        isComputerShooting = true;
+        yield return new WaitForSeconds(3);
         _compTower.transform.LookAt(_playerTower.transform);
 
         Vector3 rot = _compTower.transform.rotation.eulerAngles;
@@ -86,15 +86,17 @@ public class GameManager : MonoBehaviour
         _compTower.transform.rotation = Quaternion.Euler(rot);
 
         ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase, 700);
+        isComputerShooting = false;
+        isPlayersTurn = true;
     }
 
-    private void ShootCannonBall(GameObject cannonBallPlaceholderTip, GameObject cannBallPlaceHolderBase, float power)
+    private void ShootCannonBall(GameObject cannonBallPlaceholderTip, GameObject cannonBallPlaceHolderBase, float power)
     {
         Vector3 position = cannonBallPlaceholderTip.transform.position;
         Quaternion rotation = cannonBallPlaceholderTip.transform.rotation;
 
         GameObject ball = this.spawnBall(position, rotation);
-        Vector3 projectionVector = ball.transform.position - cannBallPlaceHolderBase.transform.position;
+        Vector3 projectionVector = ball.transform.position - cannonBallPlaceHolderBase.transform.position;
         ball.GetComponent<Rigidbody>().AddForce(projectionVector * power);
 
         Collider[] colliders = Physics.OverlapSphere(position, 20);
@@ -105,7 +107,7 @@ public class GameManager : MonoBehaviour
             {
                 continue;
             }
-            c.attachedRigidbody.AddExplosionForce(2, cannBallPlaceHolderBase.transform.position, 10, 1, ForceMode.Impulse);
+            //c.attachedRigidbody.AddExplosionForce(2, cannonBallPlaceHolderBase.transform.position, 10, 1, ForceMode.Impulse);
         }
     }
 
