@@ -21,8 +21,8 @@ public class CardboardControl : MonoBehaviour {
 
   public void Awake() {
     trigger = gameObject.GetComponent<CardboardControlTrigger>();
-    gaze = gameObject.GetComponent<CardboardControlGaze>();
-    box = gameObject.GetComponent<CardboardControlBox>();
+    //gaze = gameObject.GetComponent<CardboardControlGaze>();
+    //box = gameObject.GetComponent<CardboardControlBox>();
   }
 
   public void Update() {
