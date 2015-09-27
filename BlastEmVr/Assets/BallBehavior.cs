@@ -17,19 +17,16 @@ public class BallBehavior : MonoBehaviour {
 
     void OnCollisionEnter(Collision c)
     {
-        if (c.gameObject != null && c.gameObject.transform.parent != null)
+        Debug.Log("Canon ball collision");
+        if (c.gameObject != null && c.gameObject.tag.Equals("Explodable"))
         {
-            if (c.gameObject.transform.parent.name.Equals("EnemyTank"))
-            {
-                Debug.Log("came");
-                Instantiate(Explosion,
-                            transform.position,
-                            Quaternion.identity);
-                c.gameObject.transform.parent.BroadcastMessage("Hit", c.transform.position);
-                Destroy(gameObject);
-            }
+            Debug.Log("came");
+            Instantiate(Explosion,
+                        transform.position,
+                        Quaternion.identity);
+            c.gameObject.BroadcastMessage("Hit", c.transform.position);
+            Destroy(gameObject);
         }
         Destroy(gameObject, 3f);
-
     }
 }
