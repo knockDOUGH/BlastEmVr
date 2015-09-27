@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class BallBehavior : MonoBehaviour {
-    public GameObject Enemy;
+    private GameObject Enemy;
+    public GameObject Explosion;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,11 @@ public class BallBehavior : MonoBehaviour {
     {
         if (c.gameObject.name.Equals("EnemyTank"))
         {
+            Debug.Log("came");
+            Instantiate(Explosion,
+                        transform.position,
+                        Quaternion.identity);
+            c.gameObject.BroadcastMessage("Hit", c.transform.position);
             Destroy(gameObject);
         }
         else
