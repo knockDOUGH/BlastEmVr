@@ -76,9 +76,11 @@ public class GameManager : MonoBehaviour
         _compTower.transform.LookAt(_playerTower.transform);
 
         Vector3 rot = _compTower.transform.rotation.eulerAngles;
-        float degreesVariance = 10;
+        float degreesVarianceY = 10;
+        float degreesVarianceX = 10;
 
-        rot.y += Random.Range(-degreesVariance, degreesVariance);
+        rot.y += Random.Range(-degreesVarianceY, degreesVarianceY);
+        rot.x += Random.Range(-degreesVarianceX, degreesVarianceX);
 
         _compTower.transform.rotation = Quaternion.Euler(rot);
 
