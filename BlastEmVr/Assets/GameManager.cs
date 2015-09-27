@@ -3,15 +3,19 @@
 public class GameManager : MonoBehaviour
 {
     public GameObject _cannonBall;
-    public GameObject _cannonBallPlaceholder;
+    public GameObject _cannonBallPlaceholderPlayer;
+    public GameObject _playerTankBody;
+
+    public GameObject _cannonBallPlaceholderComputer;
+    public GameObject _computerTankBody;
 
     public float maxPower;
     public float powerIncreaseRate;
-    public GameObject _playerTankBody;
     public CardboardControl cardboardControl;
 
     private bool pulling = false;
     private float power = 0;
+    private bool isPlayersTurn = true;
 
     // Use this for initialization
     void Start ()
@@ -29,6 +33,12 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isPlayersTurn)
+        {
+            GenerateRandomComputerShot();
+            isPlayersTurn = true;
+        }
+
         if (pulling && power < maxPower)
         {
             power += powerIncreaseRate;
@@ -50,16 +60,22 @@ public class GameManager : MonoBehaviour
     private void stopPull(object sender)
     {
         this.pulling = false;
-        this.ShootCannonBall();
+        this.ShootCannonBall(_cannonBallPlaceholderPlayer, _playerTankBody);
+        isPlayersTurn = false;
     }
 
-    private void ShootCannonBall()
+    private void GenerateRandomComputerShot()
     {
-        Vector3 position = _cannonBallPlaceholder.transform.position;
-        Quaternion rotation = _cannonBallPlaceholder.transform.rotation;
+        ShootCannonBall(_cannonBallPlaceholderComputer, _computerTankBody);
+    }
+
+    private void ShootCannonBall(GameObject cannonBallPlaceholder, GameObject tankTower)
+    {
+        Vector3 position = cannonBallPlaceholder.transform.position;
+        Quaternion rotation = cannonBallPlaceholder.transform.rotation;
 
         GameObject ball = this.spawnBall(position, rotation);
-        Vector3 projectionVector = ball.transform.position - _playerTankBody.transform.position;
+        Vector3 projectionVector = ball.transform.position - tankTower.transform.position;
         ball.GetComponent<Rigidbody>().AddForce(projectionVector * power);
     }
 
