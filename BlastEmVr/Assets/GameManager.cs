@@ -1,13 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject _cannonBall;
     public GameObject _playerCannonBallPlaceHolderTip;
     public GameObject _playerCannonBallPlaceHolderBase;
+    public GameObject _playerTower;
 
     public GameObject _compCannonBallPlaceHolderTip;
     public GameObject _compCannonBallPlaceHolderBase;
+    public GameObject _compTower;
 
     public float maxPower;
     public float powerIncreaseRate;
@@ -35,11 +40,11 @@ public class GameManager : MonoBehaviour
     {
         if (!isPlayersTurn)
         {
-            GenerateRandomComputerShot();
+            StartCoroutine(GenerateRandomComputerShot());
             isPlayersTurn = true;
         }
 
-        if (pulling && power < maxPower)
+        if (isPlayersTurn && pulling && power < maxPower)
         {
             power += powerIncreaseRate;
             if (power > maxPower) power = maxPower;
@@ -53,19 +58,25 @@ public class GameManager : MonoBehaviour
 
     private void startPull(object sender)
     {
+        Debug.Log("start pull");
         this.pulling = true;
         this.power = 0;
     }
 
     private void stopPull(object sender)
     {
+        Debug.Log("stop pull");
         this.pulling = false;
         this.ShootCannonBall(_playerCannonBallPlaceHolderTip, _playerCannonBallPlaceHolderBase);
         isPlayersTurn = false;
     }
 
-    private void GenerateRandomComputerShot()
+    private IEnumerator GenerateRandomComputerShot()
     {
+        yield return new WaitForSeconds(0);
+
+        _compTower.transform.LookAt(_playerTower.transform);
+
         ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase);
     }
 
