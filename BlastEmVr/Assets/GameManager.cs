@@ -88,14 +88,25 @@ public class GameManager : MonoBehaviour
         ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase, 700);
     }
 
-    private void ShootCannonBall(GameObject cannonBallPlaceholder, GameObject tankTower, float power)
+    private void ShootCannonBall(GameObject cannonBallPlaceholderTip, GameObject cannBallPlaceHolderBase, float power)
     {
-        Vector3 position = cannonBallPlaceholder.transform.position;
-        Quaternion rotation = cannonBallPlaceholder.transform.rotation;
+        Vector3 position = cannonBallPlaceholderTip.transform.position;
+        Quaternion rotation = cannonBallPlaceholderTip.transform.rotation;
 
         GameObject ball = this.spawnBall(position, rotation);
-        Vector3 projectionVector = ball.transform.position - tankTower.transform.position;
+        Vector3 projectionVector = ball.transform.position - cannBallPlaceHolderBase.transform.position;
         ball.GetComponent<Rigidbody>().AddForce(projectionVector * power);
+
+        Collider[] colliders = Physics.OverlapSphere(position, 20);
+
+        foreach (Collider c in colliders)
+        {
+            if (c.attachedRigidbody == null)
+            {
+                continue;
+            }
+            c.attachedRigidbody.AddExplosionForce(2, cannBallPlaceHolderBase.transform.position, 10, 1, ForceMode.Impulse);
+        }
     }
 
 
