@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TankEventTracker : MonoBehaviour {
 
@@ -15,13 +17,23 @@ public class TankEventTracker : MonoBehaviour {
 	
 	}
 
-    public void Hit(Vector3 position)
+    public void Hit(Collision tankPart)
     {
         hitCount++;
         Debug.Log("hit #" + hitCount);
         if (hitCount >= 3)
         {
-            Explode(position);
+            // get the tank and remove rigidbody
+            Destroy(gameObject.GetComponent<Rigidbody>());
+
+            //Add rigid bodies to tank parts
+            foreach (Transform part in gameObject.transform)
+            {
+                Debug.Log("don't be a child");
+                part.gameObject.AddComponent<Rigidbody>();
+            }
+
+            Explode(tankPart.transform.position);
         }
     }
 
@@ -30,25 +42,16 @@ public class TankEventTracker : MonoBehaviour {
         Instantiate(Explosion,
                     position,
                         Quaternion.identity);
-        Ray ray = Camera.main.ScreenPointToRay(position);
+        Collider[] colliders = Physics.OverlapSphere(position, 10);
 
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100))
+        foreach (Collider c in colliders)
         {
-            Collider[] colliders = Physics.OverlapSphere(hit.point, 10);
-
-            foreach (Collider c in colliders)
+            if (c.attachedRigidbody == null)
             {
-                Debug.Log("hit #" + hitCount);
-                if (c.attachedRigidbody == null)
-                {
-                    continue;
-                }
-                Debug.Log("explode");
-                c.attachedRigidbody.AddExplosionForce(5 /*force*/, hit.point, 5, 1, ForceMode.Impulse);
+                continue;
             }
-            //body.AddExplosionForce(5 /*force*/, hit.point, 5, 3, ForceMode.Impulse);
+            Debug.Log("explode");
+            c.attachedRigidbody.AddExplosionForce(5 /*force*/, position, 5, 1, ForceMode.Impulse);
         }
-            //Destroy(gameObject);
     }
 }

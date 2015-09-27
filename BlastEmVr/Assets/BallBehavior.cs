@@ -15,18 +15,19 @@ public class BallBehavior : MonoBehaviour {
 	
 	}
 
-    void OnCollisionEnter(Collision c)
+    void OnCollisionEnter(Collision otherObject)
     {
         Debug.Log("Canon ball collision");
-        if (c.gameObject != null && c.gameObject.tag.Equals("Explodable"))
+        if (otherObject.gameObject != null && otherObject.gameObject.tag.Equals("Explodable"))
         {
             Debug.Log("came");
             Instantiate(Explosion,
                         transform.position,
                         Quaternion.identity);
-            c.gameObject.BroadcastMessage("Hit", c.transform.position);
+            otherObject.gameObject.BroadcastMessage("Hit", otherObject);
             Destroy(gameObject);
         }
-        Destroy(gameObject, 3f);
+
+        if(gameObject != null) Destroy(gameObject, 3f);
     }
 }
