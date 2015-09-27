@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -76,6 +74,13 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0);
 
         _compTower.transform.LookAt(_playerTower.transform);
+
+        Vector3 rot = _compTower.transform.rotation.eulerAngles;
+        float degreesVariance = 10;
+
+        rot.y += Random.Range(-degreesVariance, degreesVariance);
+
+        _compTower.transform.rotation = Quaternion.Euler(rot);
 
         ShootCannonBall(_compCannonBallPlaceHolderTip, _compCannonBallPlaceHolderBase);
     }
